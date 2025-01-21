@@ -1,0 +1,11 @@
+*.aux
+*.fls
+*.log
+*.toc
+*.fdb_latexmk
+*.synctex.gz
+*.loe
+**/_minted/**
+*.bbl
+*.blg
+*.thm
