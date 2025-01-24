@@ -9,3 +9,7 @@
 *.bbl
 *.blg
 *.thm
+*.Rproj.user
+*.Rproj
+*.Rhistory
+*.csv
