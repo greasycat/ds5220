@@ -13,3 +13,6 @@
 *.Rproj
 *.Rhistory
 *.csv
+.obsidian/
+*.pygtex
+*.pygstyle
