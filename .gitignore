@@ -16,3 +16,4 @@
 .obsidian/
 *.pygtex
 *.pygstyle
+.Rproj.user
