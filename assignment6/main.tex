@@ -1,0 +1,80 @@
+\documentclass{article}
+\usepackage[bottom=2cm, right=1.5cm, left=1.5cm, top=2cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{exercise} % Exercises Style
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{environ}
+
+% Enable Code
+\usepackage{minted}
+\let \extra T
+
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\E}{E}
+
+\usepackage{fancyhdr}
+\newenvironment{solution}
+{\renewcommand\qedsymbol{$\blacksquare$}
+\begin{proof}[Solution]$ $}{
+\end{proof}}
+
+\title{Solutions to Assignment }
+\author{Rongfei Jin}
+\begin{document}
+
+\pagestyle{fancy}
+\fancyhf{}%
+\fancyhead[L]{\textbf{ DS5220 \ Assignment 6}}
+\fancyhead[R]{\textbf{Rongfei Jin}}
+\fancyfoot[C]{\thepage}%
+\maketitle
+\newpage
+
+\section{Chapter 5 - Conceptual 3}
+
+\begin{enumerate}[label=(\alph*)]
+
+
+\item
+K-fold CV is implemented the following way:
+\begin{enumerate}
+    \item Split the data into $K$ folds.
+    \item For each fold $i$:
+    \begin{enumerate}
+        \item Use the other $K-1$ folds as training data.
+        \item Train the model on the training data.
+        \item Evaluate the model on the $i$-th fold.
+    \end{enumerate}
+    \item Average the evaluation results over all $K$ folds.
+\end{enumerate}
+
+\item Compare to the validation set approach, K-fold CV ensures that all data points are used for both training and validation, which can lead to a more reliable estimate of the model's performance. It also reduces the variance of the performance estimate by averaging over multiple folds. 
+
+However, K-fold CV can be computationally more expensive, especially for large datasets or complex models, as it requires training the model $K$ times.
+
+\item  LOOCV is a special case of K-fold CV where $K$ is equal to the number of data points. The K-fold CV where k is less than N is less computationally expensive, as it only requires training the model $K$ times instead of $N$ times. More over, since almost all points are used for training, the variance of error will be greater than that of the K-fold CV, making it more prone to overfitting.  However, if a dataset is small, LOOCV can provide a more accurate estimate of the model's performance, as it uses all but one data point for training.
+\end{enumerate}
+
+\section{Chapter 5 - Conceptual 4}
+
+\begin{enumerate}[label=(\alph*)]
+\item Repeated sample the original with replacement to create B dataset
+\item Train the model on each dataset
+\item Predict the Y with the particular X value
+\item Compute the standard deviation of the predictions
+\end{enumerate}
+
+\section{Chapter 5 - Applied 5}
+
+
+
+
+
+\end{document}
