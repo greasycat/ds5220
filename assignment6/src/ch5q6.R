@@ -20,5 +20,13 @@ boot.fn <- function(data, index) {
 
 boot_results <- boot(Default, boot.fn, 1000, parallel = "multicore", ncpus = 16)
 
-# the income std error from the bootstrap is higher than the original model where the balance std error is lower, such change could suggest an underestimation of income std error and an overestimation of balance std error
+boot_results
+# Bootstrap Statistics :
+#         original       bias     std. error
+# t1* 4.985167e-06 1.503909e-08 1.409532e-07
+# t2* 2.273731e-04 1.204649e-06 1.135513e-05
+
+# the income std error from the bootstrap is higher than the original model 
+# where the balance std error is lower, such change could suggest an underestimation of income std error 
+# and an overestimation of balance std error
 

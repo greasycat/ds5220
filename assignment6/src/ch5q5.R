@@ -25,6 +25,7 @@ validation_error <- function(seed_num) {
 validation_error(1)
 validation_error(2)
 validation_error(3)
+# 0.0264
 
 validation_error_2 <- function(seed_num) {
   set.seed(seed_num)
@@ -46,4 +47,4 @@ validation_error_2 <- function(seed_num) {
 validation_error_2(1)
 validation_error_2(2)
 validation_error_2(3)
-
+# 0.0246

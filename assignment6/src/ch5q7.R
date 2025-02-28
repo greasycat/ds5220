@@ -28,5 +28,9 @@ for (n in 1:(nrow(Weekly) - 1)) {
 
 mean(err)
 # 0.4504
+# Slightly lower than 50% error rate
+
+
+
 
 
