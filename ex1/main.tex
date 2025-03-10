@@ -1,0 +1,182 @@
+\documentclass{article}
+\usepackage[bottom=2cm, right=1.5cm, left=1.5cm, top=2cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{exercise} % Exercises Style
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{environ}
+
+
+
+% Enable Code
+\usepackage{minted}
+\let \extra T
+
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\E}{E}
+
+\usepackage{fancyhdr}
+\newenvironment{solution}
+  {\renewcommand\qedsymbol{$\blacksquare$}\begin{proof}[Solution]$ $}
+  {\end{proof}}
+
+\title{Solutions to Exam 1 }
+\author{Rongfei Jin}
+\begin{document}
+
+\pagestyle{fancy}
+\fancyhf{}%
+\fancyhead[L]{\textbf{ DS5220 \ Exam 1 }}
+\fancyhead[R]{\textbf{Rongfei Jin}}
+\fancyfoot[C]{\thepage}%
+\maketitle
+
+\section*{Problem 1}
+
+
+\begin{enumerate}[label=(\alph*)]
+\item See code above
+\item See code above
+\item 
+\begin{enumerate}[label=(\arabic*)]
+
+
+    \item Gender
+\begin{enumerate}[label=(\roman*)]
+    \item Faster multiplication on 0
+    \item
+gender encoded in 0,1 is easiser to interpret because the coefficients represents the effect of being male, or no effect if being female
+\end{enumerate}
+\item Income and travel
+
+inc25p: 1 if income is greater than 25k, 0 otherwise \\
+inc55p: 1 if income is greater than 55k, 0 otherwise \\
+inc95p: 1 if income is greater than 95k, 0 otherwise \\
+tra025p: 1 if travel is greater than .25h, 0 otherwise \\
+tra400p: 1 if travel is greater than 4h, 0 otherwise \\
+
+
+\begin{enumerate}[label=(\roman*)]
+    \item Design matrix achieves full rank.
+These transformations solve the collinearity problem since if the model has all the condition except the last one, then the last one is determined, so numerically it is more stable. 
+
+\item 
+Easier to interpret as the coefficients are simply the effect of income greater than a certain threshold 
+
+\end{enumerate}
+\end{enumerate}
+
+\item 
+The new model has 7 coefficients (without intercept) and NO coefficients are NA. Gender, income greater than 55k, travel time greater than 0.25h and travel time greater than 4h are significant. \\
+
+Based on the significant coefficients, we can make the following interpretation.
+
+\begin{enumerate}[label=(\roman*)]
+    \item Males are associated with 0.36 more visit than female
+    \item Income greater than 55k is associated with 0.5 less visit than income less than 55k
+    \item Travel time greater than 0.25h is associated with 0.6 less visit than travel time less than 0.25h
+    \item Travel time greater than 4h is associated with 1.8 less visit than travel time less than 4h
+
+\end{enumerate}
+
+
+
+\item
+The possion regression has the following probability density function
+\[
+    p(y|\eta) = \frac{\eta^y e^{-\eta}}{y!}
+\]
+where $\eta = \exp(\beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p)$ is the mean of the possion distribution. Therefore, we have
+\[
+    \E(y|x_1, \ldots, x_p) = \eta = \exp(\beta_0 + \beta_1 x_1 + \ldots + \beta_p x_p)
+\]
+
+Given female, earning \(\$\)65,000 annually, and living two miles from the park. We have the following data
+\(\text{gen} = 0\), \(\text{inc25p} = 1\) \(\text{inc55p} = 1\), \(\text{inc95p} = 0\),\(\text{tra025p} = 0\), \(\text{tra400p} = 0\).
+
+Therefore, we have
+\[
+    \E(y|x_1, \ldots, x_p) = \exp(\beta_0 + \beta_1 0 + \beta_2 1 + \beta_3 1 + \beta_4 0 + \beta_5 0 + \beta_6 0) = \exp(\beta_0 + \beta_2 + \beta_3) = 34.49
+\]
+Given male, earning \(\$\)65,000 annually, and living two miles from the park. We have the following data
+
+\(\text{gen} = 1\), \(\text{inc25p} = 1\) \(\text{inc55p} = 1\), \(\text{inc95p} = 0\),\(\text{tra025p} = 0\), \(\text{tra400p} = 0\).
+
+\[
+    \E(y|x_1, \ldots, x_p) = \exp(\beta_0 + \beta_1 1 + \beta_2 1 + \beta_3 1 + \beta_4 0 + \beta_5 0) = \exp(\beta_0 + \beta_1 + \beta_2 + \beta_3) = 49.11
+\]
+
+\[\frac{E(y|\text{male with given conditions})}{E(y|\text{female with given conditions})} = \frac{49.11}{34.49} \approx 1.42\]
+
+\[\frac{E(y|\text{female with given conditions})}{E(y|\text{male with given conditions})} = \frac{34.49}{49.11} \approx 0.703\]
+
+\end{enumerate}
+
+\section*{Problem 2}
+
+\begin{enumerate}[label=(\alph*)]
+\item See code above
+\item
+\begin{enumerate}[label=(\roman*)]
+\item the center from both approaches are very close
+\item the bootstrapped CI width is wider than the normal CI, which is expected since the normal CI assumes the distribution is normal, but the bootstrapped CI does not make this assumption
+
+\end{enumerate}
+\end{enumerate}
+
+\section*{Problem 3}
+\begin{enumerate}[label=(\alph*)]
+\item
+
+Since \(Y \sim \text{Poisson}(\lambda)\) we have
+\(P(Y=y;\lambda) = \frac{\lambda^y e^{-\lambda}}{y!}\)
+
+We compute the Momement Generating Function
+\begin{align*}
+    M_Y(t) &= \E(e^{tY}) \\
+    &= \sum_{y=0}^{\infty} e^{ty} P(Y=y;\lambda) \\
+    &= \sum_{y=0}^{\infty} e^{ty} \frac{\lambda^y e^{-\lambda}}{y!} \\
+    &= e^{-\lambda} \sum_{y=0}^{\infty} \frac{(\lambda e^t)^y}{y!} \\
+    &= e^{-\lambda} e^{\lambda e^t} & \text{Taylor expansion}\\
+    &= e^{\lambda (e^t - 1)}
+\end{align*}
+Now we compute mean by deriving the first moment
+\begin{align*}
+    \E(Y) &= M_Y'(0) \\
+    &= \frac{d}{dt} e^{\lambda (e^t - 1)} \bigg|_{t=0} \\
+    &= \lambda e^{\lambda (e^0 - 1)} \\
+    &= \lambda
+\end{align*}
+
+Now we compute the variance by first deriving the second moment
+\begin{align*}
+    \E(Y^2) &= M_Y''(0) \\
+    &= \frac{d^2}{dt^2} e^{\lambda (e^t - 1)} \bigg|_{t=0} \\
+    &= \lambda e^{\lambda (e^0 - 1)} + \lambda^2 e^{\lambda (e^0 - 1)} \\
+    &= \lambda + \lambda^2
+\end{align*}
+
+Now we compute the variance
+\begin{align*}
+    \Var(Y) &= \E(Y^2) - \E(Y)^2 \\
+    &= (\lambda + \lambda^2) - \lambda^2 \\
+    &= \lambda
+\end{align*}
+
+\item 
+
+\begin{align*}
+    p(y | \lambda) &= \frac{\lambda^y e^{-\lambda}}{y!} \\
+    &= e^{\ln(\frac{\lambda^y e^{-\lambda}}{y!})} \\
+    &= e^{y \ln(\lambda) - \lambda - \ln(y!)} \\
+\end{align*}
+
+\end{enumerate}
+
+\end{document}
