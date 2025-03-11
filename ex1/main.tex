@@ -19,6 +19,7 @@
 \DeclareMathOperator{\Cov}{Cov}
 \DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\diag}{diag}
 
 \usepackage{fancyhdr}
 \newenvironment{solution}
@@ -189,7 +190,6 @@
       \right\}
     \]
   \item
-  Let \(\vectrm{1} = (1, 1, \ldots, 1)^T\) and \(\vectrm{\tilde X} = (\vectrm{x}_1, \vectrm{x}_2, \ldots, \vectrm{x}_n)\). We have
     \begin{align*}
       \ell(\beta_0, \vect{\beta}| \vectrm{y}, \vectrm{X}) &= \log \prod_{i=1}^{n} p(y_i| \vectrm{x}_i, \beta_0, \vect{\beta}) \\
       &= \sum_{i=1}^{n} \log p(y_i| \vectrm{x}_i, \beta_0, \vect{\beta}) \\
@@ -233,8 +233,22 @@
 \end{bmatrix}
 \end{align*}
 
-where \(\frac{\partial}{\partial \vect{\beta}^2}\) is a matrix with \(\frac{\partial^2}{\partial {\beta_i}^2}\) as its diagonal elements.
+where \(\frac{\partial}{\partial \vect{\beta}^2}\) is a matrix with \(\frac{\partial}{\partial \beta_i \partial \beta_j}\) where\(i = 1,\ldots, p, j = 1,\ldots p\)
 
 \item for the function to be convex, the Hessian matrix must be positive definite.
+
+\item for the ease of computation, we will express the gradient and Hessian in matrix form and let \(\vect \beta' = \begin{bmatrix}
+    \beta_0 & \beta_1 & \ldots & \beta_p
+\end{bmatrix}^T\),
+% let \(\vectrm{1}_n = \begin{bmatrix}
+%     1 & 1 & \ldots & 1
+% \end{bmatrix}^T\)
+
+\[\frac{\partial}{\partial \vect \beta'} = -\vectrm X^T \vectrm y
++ \vectrm X^T \exp(\vectrm X \vect \beta')
+\]
+
+\[\frac{\partial^2}{\partial \vect \beta' \partial \vect \beta'^T} = \vectrm X^T \diag(\exp \{\vectrm X \vect \beta'\}) \vectrm X\]
 \end{enumerate}
+
 \end{document}

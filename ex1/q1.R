@@ -1,5 +1,5 @@
 # 1a
-install.packages("COUNT")
+#install.packages("COUNT")
 data(loomis)
 str(loomis)
 
