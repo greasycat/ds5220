@@ -9,13 +9,12 @@
 \usepackage{caption}
 \usepackage{environ}
 
-
-
 % Enable Code
 \usepackage{minted}
 \let \extra T
 
 \newcommand{\vect}[1]{\boldsymbol{#1}}
+\newcommand{\vectrm}[1]{\boldsymbol{\rm #1}}
 \DeclareMathOperator{\Tr}{Tr}
 \DeclareMathOperator{\Cov}{Cov}
 \DeclareMathOperator{\Var}{Var}
@@ -23,8 +22,10 @@
 
 \usepackage{fancyhdr}
 \newenvironment{solution}
-  {\renewcommand\qedsymbol{$\blacksquare$}\begin{proof}[Solution]$ $}
-  {\end{proof}}
+{\renewcommand\qedsymbol{$\blacksquare$}
+\begin{proof}[Solution]$ $}
+  {
+\end{proof}}
 
 \title{Solutions to Exam 1 }
 \author{Rongfei Jin}
@@ -39,144 +40,201 @@
 
 \section*{Problem 1}
 
-
 \begin{enumerate}[label=(\alph*)]
-\item See code above
-\item See code above
-\item 
-\begin{enumerate}[label=(\arabic*)]
+  \item See code above
+  \item See code above
+  \item
+    \begin{enumerate}[label=(\arabic*)]
 
+      \item Gender
+        \begin{enumerate}[label=(\roman*)]
+          \item Faster multiplication on 0
+          \item
+            gender encoded in 0,1 is easiser to interpret because the coefficients represents the effect of being male, or no effect if being female
+        \end{enumerate}
+      \item Income and travel
 
-    \item Gender
-\begin{enumerate}[label=(\roman*)]
-    \item Faster multiplication on 0
-    \item
-gender encoded in 0,1 is easiser to interpret because the coefficients represents the effect of being male, or no effect if being female
-\end{enumerate}
-\item Income and travel
+        inc25p: 1 if income is greater than 25k, 0 otherwise \\
+        inc55p: 1 if income is greater than 55k, 0 otherwise \\
+        inc95p: 1 if income is greater than 95k, 0 otherwise \\
+        tra025p: 1 if travel is greater than .25h, 0 otherwise \\
+        tra400p: 1 if travel is greater than 4h, 0 otherwise \\
 
-inc25p: 1 if income is greater than 25k, 0 otherwise \\
-inc55p: 1 if income is greater than 55k, 0 otherwise \\
-inc95p: 1 if income is greater than 95k, 0 otherwise \\
-tra025p: 1 if travel is greater than .25h, 0 otherwise \\
-tra400p: 1 if travel is greater than 4h, 0 otherwise \\
+        \begin{enumerate}[label=(\roman*)]
+          \item Design matrix achieves full rank.
+            These transformations solve the collinearity problem since if the model has all the condition except the last one, then the last one is determined, so numerically it is more stable.
 
+          \item
+            Easier to interpret as the coefficients are simply the effect of income greater than a certain threshold
 
-\begin{enumerate}[label=(\roman*)]
-    \item Design matrix achieves full rank.
-These transformations solve the collinearity problem since if the model has all the condition except the last one, then the last one is determined, so numerically it is more stable. 
+        \end{enumerate}
+    \end{enumerate}
 
-\item 
-Easier to interpret as the coefficients are simply the effect of income greater than a certain threshold 
+  \item
+    The new model has 7 coefficients (without intercept) and NO coefficients are NA. Gender, income greater than 55k, travel time greater than 0.25h and travel time greater than 4h are significant. \\
 
-\end{enumerate}
-\end{enumerate}
+    Based on the significant coefficients, we can make the following interpretation.
 
-\item 
-The new model has 7 coefficients (without intercept) and NO coefficients are NA. Gender, income greater than 55k, travel time greater than 0.25h and travel time greater than 4h are significant. \\
+    \begin{enumerate}[label=(\roman*)]
+      \item Males are associated with 0.36 more visit than female
+      \item Income greater than 55k is associated with 0.5 less visit than income less than 55k
+      \item Travel time greater than 0.25h is associated with 0.6 less visit than travel time less than 0.25h
+      \item Travel time greater than 4h is associated with 1.8 less visit than travel time less than 4h
 
-Based on the significant coefficients, we can make the following interpretation.
+    \end{enumerate}
 
-\begin{enumerate}[label=(\roman*)]
-    \item Males are associated with 0.36 more visit than female
-    \item Income greater than 55k is associated with 0.5 less visit than income less than 55k
-    \item Travel time greater than 0.25h is associated with 0.6 less visit than travel time less than 0.25h
-    \item Travel time greater than 4h is associated with 1.8 less visit than travel time less than 4h
+  \item
+    The possion regression has the following probability density function
+    \[
+      p(y|\eta) = \frac{\eta^y e^{-\eta}}{y!}
+    \]
+    where $\eta = \exp(\beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p)$ is the mean of the possion distribution. Therefore, we have
+    \[
+      \E(y|x_1, \ldots, x_p) = \eta = \exp(\beta_0 + \beta_1 x_1 + \ldots + \beta_p x_p)
+    \]
 
-\end{enumerate}
+    Given female, earning \(\$\)65,000 annually, and living two miles from the park. We have the following data
+    \(\text{gen} = 0\), \(\text{inc25p} = 1\) \(\text{inc55p} = 1\), \(\text{inc95p} = 0\),\(\text{tra025p} = 0\), \(\text{tra400p} = 0\).
 
+    Therefore, we have
+    \[
+      \E(y|x_1, \ldots, x_p) = \exp(\beta_0 + \beta_1 0 + \beta_2 1 + \beta_3 1 + \beta_4 0 + \beta_5 0 + \beta_6 0) = \exp(\beta_0 + \beta_2 + \beta_3) = 34.49
+    \]
+    Given male, earning \(\$\)65,000 annually, and living two miles from the park. We have the following data
 
+    \(\text{gen} = 1\), \(\text{inc25p} = 1\) \(\text{inc55p} = 1\), \(\text{inc95p} = 0\),\(\text{tra025p} = 0\), \(\text{tra400p} = 0\).
 
-\item
-The possion regression has the following probability density function
-\[
-    p(y|\eta) = \frac{\eta^y e^{-\eta}}{y!}
-\]
-where $\eta = \exp(\beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p)$ is the mean of the possion distribution. Therefore, we have
-\[
-    \E(y|x_1, \ldots, x_p) = \eta = \exp(\beta_0 + \beta_1 x_1 + \ldots + \beta_p x_p)
-\]
+    \[
+      \E(y|x_1, \ldots, x_p) = \exp(\beta_0 + \beta_1 1 + \beta_2 1 + \beta_3 1 + \beta_4 0 + \beta_5 0) = \exp(\beta_0 + \beta_1 + \beta_2 + \beta_3) = 49.11
+    \]
 
-Given female, earning \(\$\)65,000 annually, and living two miles from the park. We have the following data
-\(\text{gen} = 0\), \(\text{inc25p} = 1\) \(\text{inc55p} = 1\), \(\text{inc95p} = 0\),\(\text{tra025p} = 0\), \(\text{tra400p} = 0\).
+    \[\frac{E(y|\text{male with given conditions})}{E(y|\text{female with given conditions})} = \frac{49.11}{34.49} \approx 1.42\]
 
-Therefore, we have
-\[
-    \E(y|x_1, \ldots, x_p) = \exp(\beta_0 + \beta_1 0 + \beta_2 1 + \beta_3 1 + \beta_4 0 + \beta_5 0 + \beta_6 0) = \exp(\beta_0 + \beta_2 + \beta_3) = 34.49
-\]
-Given male, earning \(\$\)65,000 annually, and living two miles from the park. We have the following data
-
-\(\text{gen} = 1\), \(\text{inc25p} = 1\) \(\text{inc55p} = 1\), \(\text{inc95p} = 0\),\(\text{tra025p} = 0\), \(\text{tra400p} = 0\).
-
-\[
-    \E(y|x_1, \ldots, x_p) = \exp(\beta_0 + \beta_1 1 + \beta_2 1 + \beta_3 1 + \beta_4 0 + \beta_5 0) = \exp(\beta_0 + \beta_1 + \beta_2 + \beta_3) = 49.11
-\]
-
-\[\frac{E(y|\text{male with given conditions})}{E(y|\text{female with given conditions})} = \frac{49.11}{34.49} \approx 1.42\]
-
-\[\frac{E(y|\text{female with given conditions})}{E(y|\text{male with given conditions})} = \frac{34.49}{49.11} \approx 0.703\]
+    \[\frac{E(y|\text{female with given conditions})}{E(y|\text{male with given conditions})} = \frac{34.49}{49.11} \approx 0.703\]
 
 \end{enumerate}
 
 \section*{Problem 2}
 
 \begin{enumerate}[label=(\alph*)]
-\item See code above
-\item
-\begin{enumerate}[label=(\roman*)]
-\item the center from both approaches are very close
-\item the bootstrapped CI width is wider than the normal CI, which is expected since the normal CI assumes the distribution is normal, but the bootstrapped CI does not make this assumption
+  \item See code above
+  \item
+    \begin{enumerate}[label=(\roman*)]
+      \item the center from both approaches are very close
+      \item the bootstrapped CI width is wider than the normal CI, which is expected since the normal CI assumes the distribution is normal, but the bootstrapped CI does not make this assumption
 
-\end{enumerate}
+    \end{enumerate}
 \end{enumerate}
 
 \section*{Problem 3}
 \begin{enumerate}[label=(\alph*)]
-\item
+  \item
 
-Since \(Y \sim \text{Poisson}(\lambda)\) we have
-\(P(Y=y;\lambda) = \frac{\lambda^y e^{-\lambda}}{y!}\)
+    Since \(Y \sim \text{Poisson}(\lambda)\) we have
+    \(P(Y=y;\lambda) = \frac{\lambda^y e^{-\lambda}}{y!}\)
 
-We compute the Momement Generating Function
-\begin{align*}
-    M_Y(t) &= \E(e^{tY}) \\
-    &= \sum_{y=0}^{\infty} e^{ty} P(Y=y;\lambda) \\
-    &= \sum_{y=0}^{\infty} e^{ty} \frac{\lambda^y e^{-\lambda}}{y!} \\
-    &= e^{-\lambda} \sum_{y=0}^{\infty} \frac{(\lambda e^t)^y}{y!} \\
-    &= e^{-\lambda} e^{\lambda e^t} & \text{Taylor expansion}\\
-    &= e^{\lambda (e^t - 1)}
-\end{align*}
-Now we compute mean by deriving the first moment
-\begin{align*}
-    \E(Y) &= M_Y'(0) \\
-    &= \frac{d}{dt} e^{\lambda (e^t - 1)} \bigg|_{t=0} \\
-    &= \lambda e^{\lambda (e^0 - 1)} \\
-    &= \lambda
-\end{align*}
+    We compute the Momement Generating Function
+    \begin{align*}
+      M_Y(t) &= \E(e^{tY}) \\
+      &= \sum_{y=0}^{\infty} e^{ty} P(Y=y;\lambda) \\
+      &= \sum_{y=0}^{\infty} e^{ty} \frac{\lambda^y e^{-\lambda}}{y!} \\
+      &= e^{-\lambda} \sum_{y=0}^{\infty} \frac{(\lambda e^t)^y}{y!} \\
+      &= e^{-\lambda} e^{\lambda e^t} & \text{Taylor expansion}\\
+      &= e^{\lambda (e^t - 1)}
+    \end{align*}
+    Now we compute mean by deriving the first moment
+    \begin{align*}
+      \E(Y) &= M_Y'(0) \\
+      &= \frac{d}{dt} e^{\lambda (e^t - 1)} \bigg|_{t=0} \\
+      &= \lambda e^{\lambda (e^0 - 1)} \\
+      &= \lambda
+    \end{align*}
 
-Now we compute the variance by first deriving the second moment
-\begin{align*}
-    \E(Y^2) &= M_Y''(0) \\
-    &= \frac{d^2}{dt^2} e^{\lambda (e^t - 1)} \bigg|_{t=0} \\
-    &= \lambda e^{\lambda (e^0 - 1)} + \lambda^2 e^{\lambda (e^0 - 1)} \\
-    &= \lambda + \lambda^2
-\end{align*}
+    Now we compute the variance by first deriving the second moment
+    \begin{align*}
+      \E(Y^2) &= M_Y''(0) \\
+      &= \frac{d^2}{dt^2} e^{\lambda (e^t - 1)} \bigg|_{t=0} \\
+      &= \lambda e^{\lambda (e^0 - 1)} + \lambda^2 e^{\lambda (e^0 - 1)} \\
+      &= \lambda + \lambda^2
+    \end{align*}
 
-Now we compute the variance
-\begin{align*}
-    \Var(Y) &= \E(Y^2) - \E(Y)^2 \\
-    &= (\lambda + \lambda^2) - \lambda^2 \\
-    &= \lambda
-\end{align*}
+    Now we compute the variance
+    \begin{align*}
+      \Var(Y) &= \E(Y^2) - \E(Y)^2 \\
+      &= (\lambda + \lambda^2) - \lambda^2 \\
+      &= \lambda
+    \end{align*}
 
-\item 
+  \item
 
-\begin{align*}
-    p(y | \lambda) &= \frac{\lambda^y e^{-\lambda}}{y!} \\
-    &= e^{\ln(\frac{\lambda^y e^{-\lambda}}{y!})} \\
-    &= e^{y \ln(\lambda) - \lambda - \ln(y!)} \\
-\end{align*}
+    \begin{align*}
+      p(y | \lambda) &= \frac{\lambda^y e^{-\lambda}}{y!} \\
+      &= e^{\log(\frac{\lambda^y e^{-\lambda}}{y!})} \\
+      &= e^{y \log(\lambda) - \lambda - \log(y!)} \\
+    \end{align*}
 
+  \item
+    since \(\log(\lambda) = \beta_0 + \vect{\beta}\cdot \vect{\rm x} = \beta_0 + \vect \beta^T \vectrm{x}\), we have
+    \[
+      p(y| \vectrm{x}, \beta_0, \vect{\beta}) = \exp\left\{ [\beta_0 + \vect{\beta}^T \vectrm{x}]y -
+        \exp\left\{
+          \beta_0 + \vect{\beta}^T \vectrm{x}
+        \right\}
+      - \log(y!)\right\}
+    \]
+
+    \[E(y| \vectrm{x}, \beta_0, \vect{\beta}) = \lambda =
+      \exp\left\{
+        \beta_0 + \vect{\beta}^T \vectrm{x}
+      \right\}
+    \]
+  \item
+  Let \(\vectrm{1} = (1, 1, \ldots, 1)^T\) and \(\vectrm{\tilde X} = (\vectrm{x}_1, \vectrm{x}_2, \ldots, \vectrm{x}_n)\). We have
+    \begin{align*}
+      \ell(\beta_0, \vect{\beta}| \vectrm{y}, \vectrm{X}) &= \log \prod_{i=1}^{n} p(y_i| \vectrm{x}_i, \beta_0, \vect{\beta}) \\
+      &= \sum_{i=1}^{n} \log p(y_i| \vectrm{x}_i, \beta_0, \vect{\beta}) \\
+        &= \sum_{i=1}^{n} \left\{ [\beta_0 + \vect{\beta}^T \vectrm{x}_i]y_i -
+            \exp\left\{
+            \beta_0 + \vect{\beta}^T \vectrm{x}_i
+            \right\}
+            - \log(y_i!)\right\} \\
+        % &= \vectrm{y}^T (\beta_0 \vectrm{1} + \vectrm{\tilde{X}} \vect{\beta}) - \vectrm{1}^T\exp(\beta_0 \vectrm{1} + \vectrm{\tilde X} \vect{\beta}) - \sum_{i=1}^{n} \log(y_i!)
+    \end{align*}
 \end{enumerate}
 
+\section*{Problem 4}
+\begin{enumerate}[label=(\alph*)]
+\item 
+\begin{align*}
+\frac{\partial}{\partial \beta_0}[ -\ell(\beta_0, \vect{\beta}| \vectrm{y}, \vectrm{X}) ]&= -\sum_{i=1}^{n} y_i + \sum_{i=1}^{n}\exp(\beta_0 + \vect{\beta}^T \vectrm{x}_i) 
+\end{align*}
+
+\begin{align*}
+\frac{\partial}{\partial \vect{\beta}}[ -\ell(\beta_0, \vect{\beta}| \vectrm{y}, \vectrm{X}) ]&= -\sum_{i=1}^{n} y_i \vectrm{x}_i + \sum_{i=1}^{n}\exp(\beta_0 + \vect{\beta}^T \vectrm{x}_i) \vectrm{x}_i
+\end{align*}
+
+\item
+\begin{align*}
+\frac{\partial^2}{\partial \beta_0^2}[ -\ell(\beta_0, \vect{\beta}| \vectrm{y}, \vectrm{X}) ]&= -\sum_{i=1}^{n}\exp(\beta_0 + \vect{\beta}^T \vectrm{x}_i) \\
+\end{align*}
+
+\begin{align*}
+\frac{\partial^2}{\partial \vect{\beta}^2}[ -\ell(\beta_0, \vect{\beta}| \vectrm{y}, \vectrm{X}) ]&= -\sum_{i=1}^{n}\exp(\beta_0 + \vect{\beta}^T \vectrm{x}_i) \vectrm{x}_i \vectrm{x}_i^T
+\end{align*}
+
+\begin{align*}
+\frac{\partial^2}{\partial \beta_0 \partial \vect{\beta}}[ -\ell(\beta_0, \vect{\beta}| \vectrm{y}, \vectrm{X}) ]&= -\sum_{i=1}^{n}\exp(\beta_0 + \vect{\beta}^T \vectrm{x}_i) \vectrm{x}_i
+\end{align*}
+
+\begin{align*}
+\mathrm{H} = \begin{bmatrix}
+    \frac{\partial}{\partial \beta_0^2} & \frac{\partial}{\partial \beta_0 \partial \vect{\beta}} \\
+    \frac{\partial}{\partial \beta_0 \partial \vect{\beta}} & \frac{\partial}{\partial \vect{\beta}^2}
+\end{bmatrix}
+\end{align*}
+
+where \(\frac{\partial}{\partial \vect{\beta}^2}\) is a matrix with \(\frac{\partial^2}{\partial {\beta_i}^2}\) as its diagonal elements.
+
+\item for the function to be convex, the Hessian matrix must be positive definite.
+\end{enumerate}
 \end{document}
