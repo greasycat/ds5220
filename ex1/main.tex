@@ -12,7 +12,6 @@
 % Enable Code
 \usepackage{minted}
 \let \extra T
-
 \newcommand{\vect}[1]{\boldsymbol{#1}}
 \newcommand{\vectrm}[1]{\boldsymbol{\rm #1}}
 \DeclareMathOperator{\Tr}{Tr}
@@ -215,15 +214,15 @@
 
 \item
 \begin{align*}
-\frac{\partial^2}{\partial \beta_0^2}[ -\ell(\beta_0, \vect{\beta}| \vectrm{y}, \vectrm{X}) ]&= -\sum_{i=1}^{n}\exp(\beta_0 + \vect{\beta}^T \vectrm{x}_i) \\
+\frac{\partial^2}{\partial \beta_0^2}[ -\ell(\beta_0, \vect{\beta}| \vectrm{y}, \vectrm{X}) ]&= \sum_{i=1}^{n}\exp(\beta_0 + \vect{\beta}^T \vectrm{x}_i) \\
 \end{align*}
 
 \begin{align*}
-\frac{\partial^2}{\partial \vect{\beta}^2}[ -\ell(\beta_0, \vect{\beta}| \vectrm{y}, \vectrm{X}) ]&= -\sum_{i=1}^{n}\exp(\beta_0 + \vect{\beta}^T \vectrm{x}_i) \vectrm{x}_i \vectrm{x}_i^T
+\frac{\partial^2}{\partial \vect{\beta}^2}[ -\ell(\beta_0, \vect{\beta}| \vectrm{y}, \vectrm{X}) ]&= \sum_{i=1}^{n}\exp(\beta_0 + \vect{\beta}^T \vectrm{x}_i) \vectrm{x}_i \vectrm{x}_i^T
 \end{align*}
 
 \begin{align*}
-\frac{\partial^2}{\partial \beta_0 \partial \vect{\beta}}[ -\ell(\beta_0, \vect{\beta}| \vectrm{y}, \vectrm{X}) ]&= -\sum_{i=1}^{n}\exp(\beta_0 + \vect{\beta}^T \vectrm{x}_i) \vectrm{x}_i
+\frac{\partial^2}{\partial \beta_0 \partial \vect{\beta}}[ -\ell(\beta_0, \vect{\beta}| \vectrm{y}, \vectrm{X}) ]&= \sum_{i=1}^{n}\exp(\beta_0 + \vect{\beta}^T \vectrm{x}_i) \vectrm{x}_i
 \end{align*}
 
 \begin{align*}
@@ -240,9 +239,6 @@ where \(\frac{\partial}{\partial \vect{\beta}^2}\) is a matrix with \(\frac{\par
 \item for the ease of computation, we will express the gradient and Hessian in matrix form and let \(\vect \beta' = \begin{bmatrix}
     \beta_0 & \beta_1 & \ldots & \beta_p
 \end{bmatrix}^T\),
-% let \(\vectrm{1}_n = \begin{bmatrix}
-%     1 & 1 & \ldots & 1
-% \end{bmatrix}^T\)
 
 \[\frac{\partial}{\partial \vect \beta'} = -\vectrm X^T \vectrm y
 + \vectrm X^T \exp(\vectrm X \vect \beta')
@@ -250,5 +246,44 @@ where \(\frac{\partial}{\partial \vect{\beta}^2}\) is a matrix with \(\frac{\par
 
 \[\frac{\partial^2}{\partial \vect \beta' \partial \vect \beta'^T} = \vectrm X^T \diag(\exp \{\vectrm X \vect \beta'\}) \vectrm X\]
 \end{enumerate}
+
+\section*{Problem 5}
+To get the loss function, We first remove the constant term \(\log(y!)\) from negative log-likelihood since it does not affect the optimization problem.
+\begin{enumerate}[label=(\alph*)]
+  \item 
+  \begin{align*}
+       \mathcal L(\beta_0 \vect \beta | \vectrm y, \vectrm X) &= \sum_{i=1}^{n} \left\{ [\beta_0 + \vect{\beta}^T \vectrm{x}_i]y_i -
+            \exp\left\{\beta_0 + \vect{\beta}^T \vectrm{x}_i\right\}
+            \right\} \\
+  \end{align*}
+\end{enumerate}
+Then we add the L2 regularization term to the loss function
+  \begin{align*}
+       \mathcal L_\lambda(\beta_0, \vect \beta | \vectrm y, \vectrm X) &= \sum_{i=1}^{n} \left\{ [\beta_0 + \vect{\beta}^T \vectrm{x}_i]y_i -
+            \exp\left\{\beta_0 + \vect{\beta}^T \vectrm{x}_i\right\}
+            \right\} + \lambda ||\vect \beta||_2^2
+  \end{align*}
+
+  We then derive the gradient and Hessian of the loss function
+
+  \begin{align*}
+    \frac{\partial}{\partial \beta_0} \mathcal L_\lambda(\beta_0, \vect \beta | \vectrm y, \vectrm X) &= -\sum_{i=1}^{n} y_i + \sum_{i=1}^{n}\exp(\beta_0 + \vect{\beta}^T \vectrm{x}_i) \\
+    \frac{\partial}{\partial \vect{\beta}} \mathcal L_\lambda(\beta_0, \vect \beta | \vectrm y, \vectrm X) &= -\sum_{i=1}^{n} y_i \vectrm{x}_i + \sum_{i=1}^{n}\exp(\beta_0 + \vect{\beta}^T \vectrm{x}_i) \vectrm{x}_i - 2\lambda\vect \beta \\
+    \frac{\partial^2}{\partial \beta_0^2} \mathcal L_\lambda(\beta_0, \vect \beta | \vectrm y, \vectrm X) &= \sum_{i=1}^{n}\exp(\beta_0 + \vect{\beta}^T \vectrm{x}_i) \\
+    \frac{\partial^2}{\partial \vect{\beta}^2} \mathcal L_\lambda(\beta_0, \vect \beta | \vectrm y, \vectrm X) &= \sum_{i=1}^{n}\exp(\beta_0 + \vect{\beta}^T \vectrm{x}_i) \vectrm{x}_i \vectrm{x}_i^T - 2\lambda \vectrm I \\
+    \frac{\partial^2}{\partial \beta_0 \partial \vect{\beta}} \mathcal L_\lambda(\beta_0, \vect \beta | \vectrm y, \vectrm X) &= \sum_{i=1}^{n}\exp(\beta_0 + \vect{\beta}^T \vectrm{x}_i) \vectrm{x}_i \\
+  \end{align*}
+
+  we can write the gradient and Hessian in matrix form as
+  \begin{align*}
+    \frac{\partial}{\partial \vect \beta'} \mathcal L_\lambda(\beta_0, \vect \beta, \vect \beta' | \vectrm y, \vectrm X) &= -\vectrm X^T \vectrm y
++ \vectrm X^T \exp(\vectrm X \vect \beta') - 2\lambda [0;\vect \beta] \\
+    \frac{\partial^2}{\partial \vect \beta' \partial \vect \beta'^T} \mathcal L_\lambda(\beta_0, \vect \beta \vect \beta'| \vectrm y, \vectrm X) &= \vectrm X^T \diag(\exp \{\vectrm X \vect \beta'\}) \vectrm X - 2\lambda (\vectrm I - e_1e_1^T)
+  \end{align*}
+
+  It is required that the Hessian matrix is positive definite for the loss function to be convex.
+
+
+
 
 \end{document}

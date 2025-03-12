@@ -1,0 +1,193 @@
+
+{
+  "Subfile header": {
+    "prefix": "subfile",
+    "body": [
+      "\\documentclass[../$1.tex]{subfiles}"
+    ],
+    "description": "subfile header needed for multi-tex project"
+  },
+  "Letter-numbered Enumerate": {
+    "prefix": "EnumLetter",
+    "body": [
+      "\\begin{enumerate}[label=(\\alph*)]",
+      "$1",
+      "\\end{enumerate}"
+    ],
+    "description": "enumerate list with letter numbered"
+  },
+  "Solution Environment": {
+    "prefix": "solution",
+    "body": [
+      "\\begin{solution}",
+      "$1",
+      "\\end{solution}"
+    ],
+    "description": "solution environment"
+  },
+  "Exercise": {
+    "prefix": "exercise",
+    "body": [
+      "\\begin{Exercise}",
+      "$1",
+      "\\end{Exercise}"
+    ],
+    "description": "exercises environment"
+  },
+  "Proof": {
+    "prefix": "proof",
+    "body": [
+      "\\begin{proof}",
+      "$1",
+      "\\end{proof}"
+    ],
+    "description": "proof environment"
+  },
+  "Unnumbered Align": {
+    "prefix": "align*",
+    "body": [
+      "\\begin{align*}",
+      "$1",
+      "\\end{align*}"
+    ],
+    "description": "unnumbered align environment"
+  },
+  "R Code": {
+    "prefix": "rcode",
+    "body": [
+      "\\begin{minted}{r}",
+      "$1",
+      "\\end{minted}"
+    ],
+    "description": "R code environment"
+  },
+  "Enable Extras like Code and Figure": {
+    "prefix": "enableExtras",
+    "body": [
+      "\\let \\extra F"
+    ]
+  },
+  "Extra Minted Package": {
+    "prefix": "extraMinted",
+    "body": [
+      "\\if \\extra T \\usepackage{minted} \\fi"
+    ]
+  },
+  "Extra If Env": {
+    "prefix": "extraIfEnv",
+    "body": [
+      "\\ifx \\extra T",
+      "$1",
+      "\\fi"
+    ]
+  },
+  "Probability Measure": {
+    "prefix": "PP",
+    "body": [
+      "\\mathbb{P}($1)"
+    ],
+    "description": "Probability Measure in contrast of real world Probability Pr(X)"
+  },
+  "Union": {
+    "prefix": "union",
+    "body": [
+      "\\bigcup_{${1:min}}^{${2:max}}$3"
+    ],
+    "description": "Union symbol"
+  },
+  "Intersection": {
+    "prefix": "intersection",
+    "body": [
+      "\\bigcap_{${1:min}}^{${2:max}}$3"
+    ],
+    "description": "Intersection symbol"
+  },
+  "Sum 1 to N": {
+    "prefix": "sum1n",
+    "body": [
+      "\\sum_{i=1}^{n} $1"
+    ],
+    "description": "Summation from 1 to n"
+  },
+  "Partial Derivative": {
+    "prefix": "partial",
+    "body": [
+      "\\frac{\\partial}{\\partial $2}"
+    ],
+    "description": "Partial Derivative"
+  },
+  "Assignment": {
+    "prefix": "assignment\r",
+    "body": [
+      "\\documentclass{article}\r",
+      "\\usepackage[bottom=2cm, right=1.5cm, left=1.5cm, top=2cm]{geometry}\r",
+      "\\usepackage{amsmath}\r",
+      "\\usepackage{amssymb}\r",
+      "\\usepackage{amsthm}\r",
+      "\\usepackage{enumitem}\r",
+      "\\usepackage{exercise} % Exercises Style\r",
+      "\\usepackage{graphicx}\r",
+      "\\usepackage{caption}\r",
+      "\\usepackage{environ}\r",
+      "\r",
+      "\r",
+      "\r",
+      "% Enable Code\r",
+      "\\usepackage{minted}\r",
+      "\\let \\extra T\r",
+      "\r",
+      "\\newcommand{\\vect}[1]{\\boldsymbol{#1}}\r",
+      "\\DeclareMathOperator{\\Tr}{Tr}\r",
+      "\\DeclareMathOperator{\\Cov}{Cov}\r",
+      "\\DeclareMathOperator{\\Var}{Var}\r",
+      "\\DeclareMathOperator{\\E}{E}\r",
+      "\r",
+      "\\usepackage{fancyhdr}\r",
+      "\\newenvironment{solution}\r",
+      "  {\\renewcommand\\qedsymbol{\\$\\blacksquare\\$}\\begin{proof}[Solution]\\$ \\$}\r",
+      "  {\\end{proof}}\r",
+      "\r",
+      "\\title{Solutions to Assignment $2}\r",
+      "\\author{Rongfei Jin}\r",
+      "\\begin{document}\r",
+      "\r",
+      "\\pagestyle{fancy}\r",
+      "\\fancyhf{}%\r",
+      "\\fancyhead[L]{\\textbf{$1 \\ Assignment $2}}\r",
+      "\\fancyhead[R]{\\textbf{Rongfei Jin}}\r",
+      "\\fancyfoot[C]{\\thepage}%\r",
+      "\\maketitle\r",
+      "\r",
+      "\r",
+      "\r",
+      "\\end{document}"
+    ]
+  },
+  "def": {
+    "prefix": "def",
+    "body": [
+      "\\begin{definition}",
+      "    $1",
+      "\\end{definition}"
+    ]
+  },
+  "enum": {
+    "prefix": "enum",
+    "body": [
+      "\\begin{enumerate}",
+      "    \\item ",
+      "\\end{enumerate}"
+    ]
+  },
+  "fig": {
+    "prefix": "fig",
+    "body": [
+      "\\begin{figure}[h]",
+      "    \\centering",
+      "    \\includegraphics[width=0.5\\textwidth]{$1}",
+      "    \\caption{$2}",
+      "    \\label{fig:$3}",
+      "\\end{figure}"
+    ]
+  }
+}

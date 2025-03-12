@@ -1,7 +1,7 @@
 # 1a
 #install.packages("COUNT")
-data(loomis)
-str(loomis)
+# load loomis.rda
+load("ex1/loomis.rda")
 
 # drop income and travel
 loomis$income <- NULL
