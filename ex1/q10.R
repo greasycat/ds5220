@@ -40,6 +40,7 @@ run <- function(X, y, N) {
     newton_mae <- mean(abs(newton_pred - validation_y))
 
     ridge_cv_lambda <- cv.glmnet(train_X, train_y, family="poisson", alpha=0)$lambda.min
+    cat("ridge_cv_lambda: ", ridge_cv_lambda, "\n")
 
     ridge_newton_model <- newton_method_l2(train_X, train_y, lambda=ridge_cv_lambda)
     ridge_newton_pred <- predict_newton(ridge_newton_model, validation_X)
@@ -54,6 +55,7 @@ run <- function(X, y, N) {
 
 
     lasso_cv_lambda <- cv.glmnet(train_X, train_y, family="poisson", alpha=1)$lambda.min
+    cat("lasso_cv_lambda: ", lasso_cv_lambda, "\n")
 
     lasso_model <- glmnet(train_X, train_y, family="poisson", alpha=1, lambda=lasso_cv_lambda)
     lasso_pred <- predict(lasso_model, validation_X, s=lasso_cv_lambda, type="response")

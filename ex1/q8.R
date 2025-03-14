@@ -50,8 +50,8 @@ summary_newton(pc_model1)
 pc_model2 <- newton_method(as.matrix(P[,1:2]), y)
 summary_newton(pc_model2)
 
-# model 3, y ~ PC1 + PC2 + PC3
-pc_model3 <- newton_method(as.matrix(P[,1:3]), y)
+# model 3, y ~ PC1 + PC2 + PC3 + PC4
+pc_model3 <- newton_method(as.matrix(P[,1:4]), y)
 summary_newton(pc_model3)
 
 

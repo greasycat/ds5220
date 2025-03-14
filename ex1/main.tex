@@ -106,7 +106,7 @@
       \E(y|x_1, \ldots, x_p) = \eta = \exp(\beta_0 + \beta_1 x_1 + \ldots + \beta_p x_p)
     \]
 
-    Given female, earning \(\$\)65,000 annually, and living two miles from the park. We have the following data
+    Given female, earning \(\$\)65,000 annually, and living two miles from the park (We assume the travel time will be less than 0.25h given minimal speed 40mph). We have the following data
     \(\text{gen} = 0\), \(\text{inc25p} = 1\) \(\text{inc55p} = 1\), \(\text{inc95p} = 0\),\(\text{tra025p} = 0\), \(\text{tra400p} = 0\).
 
     Therefore, we have
@@ -382,6 +382,13 @@ See (Appendix 9)
   \E(y| \vectrm{x}_i) = \exp(\hat{\beta}_0 + \hat{\vect{\beta}}^T \vectrm{x}_i)
   \]
   \item  Yes, the regularization set the coefficients of inc25p and inc95p to 0 while keep the inc55p to be non-zero. This corresponds to the coefficients significance in 1a model where inc25p and inc95p are not significant.
+  \item
+  \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.5\textwidth]{q9c.png}
+      \caption{Bootstrap CI}
+  \end{figure}
+  The approximated variances of coefficients from the bootstrapped regularized methods are lower than the variance from the MLE estimate. This is expected because the regularized methods penalize the coefficients more, which reduces the variance of the coefficients.
 \end{enumerate}
 
 \section*{Problem 10}
@@ -392,16 +399,19 @@ See (Appendix 10)
     \caption{MSE of different models}
 \end{figure}
 
-If we compare the Newton vs Ridge-Newton method, we can see that these two methods show remarkably similar performance with MSEs of 1885.96 and 1885.93 respectively, and identical RMSE and MAE values (43.43 and 23.02). This suggests that the ridge penalty in the Ridge-Newton method is having minimal impact on your model, possibly because
+If we compare the Newton vs Ridge-Newton method, we can see that these two methods show remarkably similar performance with MSEs of ~2215.54 and 2215.38 respectively, and nearly identical RMSE and MAE values. This suggests that the ridge penalty in the Ridge-Newton method is having minimal impact on your model, possibly because
 \begin{enumerate}
     \item The optimal regularization parameter is very small
     \item The features might not have high multicollinearity
     \item The dataset may be large enough relative to the number of features that regularization provides little benefit
 \end{enumerate}
 
-If we compare the Ridge-Newton vs GLMNet, we can see that both the ridge and lasso implementations via GLMNet show nearly identical performance (MSE ~2900, RMSE ~53.86, MAE ~23.28). This is considerably worse than the Newton-based methods in terms of MSE/RMSE, but interestingly, the MAE values remain close. The large gap in MSE/RMSE between the Newton methods and GLMNet implementations, coupled with similar MAE values, suggests that the GLMNet models are producing more outlier predictions with large errors, while maintaining similar average error magnitudes.
+If we compare our regression with the glmnet's model, we can see that glmnet's model has a slightly lower MSE and RMSE where the lasso model is better than the ridge model in all metrics. This is expected because the optimization problem is the same for both methods.  \cite{Tay2023}
 
-One possible reason for the difference in MSE/RMSE performance is that the Newton method directly optimizes by using the Hessian matrix, which can converge faster and more accurately for well-behaved problems. While the glmnet uses coordinate descent, which may not converge as fast and may not be as accurate for well-behaved problems. \cite{Tay2023}
+Now if we compare the PCA models with the non-PCA models, we can see that the PCA models have much lower MSE and RMSE than the non-PCA models. This is expected because the PCA completely removes the multicollinearity and noise in the data where both the ridge and lasso methods only mitigate the multicollinearity.
+
+
+
 
 \newpage
 \bibliography{refs}
