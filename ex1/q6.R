@@ -15,6 +15,7 @@ newton_method_l2 <- function(X, y, lambda=1, max_iter = 100, tol = 1e-8) {
   for (iter in 1:max_iter) {
     eta <- X %*% beta
     mu <- exp(eta)
+    # 0.5 is used to match the regularization term in the glmnet
     grad <- t(X) %*% y - t(X) %*% mu - 0.5 * lambda * c(0, beta[2:length(beta)])
 
     W <- diag(as.vector(mu))
@@ -44,4 +45,4 @@ summary_newton(newton_model_l2)
 
 library(glmnet)
 glmnet_model <- glmnet(X, y, family = "poisson", alpha=0, lambda=10)
-coef(glmnet_model, s=10)
+coef(glmnet_model)

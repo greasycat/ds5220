@@ -12,6 +12,9 @@ predict_newton <- function(model, newdata) {
 }
 
 k_fold <- function(X, y, lambda, k) {
+  index <- sample(nrow(X))
+  X <- X[index, ]
+  y <- y[index]
   # add intercept to X
   n <- nrow(X)
   fold_size <- n / k
@@ -36,9 +39,15 @@ cat("10-fold cross validation error: ", k_fold(X, y, lambda=10, k=10), "\n")
 k_fold_result <- cv.glmnet(X, y, family="poisson", alpha=0)
 cat("10-fold cross validation best lambda: ", k_fold_result$lambda.min, "\n")
 
+min_lambda <- k_fold_result$lambda.min
 
 
 k_fold_glmnet <- function(X, y, lambda, k) {
+  # randomize X and y
+  index <- sample(nrow(X))
+  X <- X[index, ]
+  y <- y[index]
+
   # add intercept to X
   n <- nrow(X)
   fold_size <- n / k
@@ -57,4 +66,5 @@ k_fold_glmnet <- function(X, y, lambda, k) {
   return(mean(errors))
 }
 
-cat("10-fold cross validation error: ", k_fold_glmnet(X, y, lambda=10, k=10), "\n")
+cat("10-fold cross validation error: ", k_fold_glmnet(X, y, lambda=min_lambda, k=10), "\n")
+cat("10-fold cross validation error: ", k_fold(X, y, lambda=min_lambda, k=10), "\n")

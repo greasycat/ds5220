@@ -2,6 +2,7 @@
 #install.packages("COUNT")
 # load loomis.rda
 load("ex1/loomis.rda")
+library(glmnet)
 
 # drop income and travel
 loomis$income <- NULL

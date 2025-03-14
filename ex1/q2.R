@@ -11,7 +11,7 @@ bootstrap <- function(data, boot.fn, R = 1000) {
   initial_stat <- boot.fn(data, 1:nrow(data))
   
   stat_length <- length(initial_stat)
-  
+
   boot_results <- matrix(NA, nrow = R, ncol = stat_length)
   
   # Perform bootstrap
@@ -45,10 +45,13 @@ bootstrap <- function(data, boot.fn, R = 1000) {
   names = c("Intercept", names)
   rownames(result) <- names
 
-  return(result)
+  return(list(
+    result = result,
+    boot_results = boot_results
+  ))
 }
 
-bootstrap_results <- bootstrap(yX, boot.fn, R = 1000)
+bootstrap_results <- bootstrap(yX, boot.fn, R = 1000)$result
 
 options(digits=4)
 

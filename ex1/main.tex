@@ -36,13 +36,14 @@
 \fancyhead[L]{\textbf{ DS5220 \ Exam 1 }}
 \fancyhead[R]{\textbf{Rongfei Jin}}
 \fancyfoot[C]{\thepage}%
+\bibliographystyle{plain} 
 \maketitle
 
 \section*{Problem 1}
-
 \begin{enumerate}[label=(\alph*)]
-  \item See code above
-  \item See code above
+  \item See (Appendix 1)
+  \item See (Appendix 1) \\
+  Some values are NA in the summary because of the collinearity which means that the design matrix is not full rank
   \item
     \begin{enumerate}[label=(\arabic*)]
 
@@ -53,6 +54,7 @@
             gender encoded in 0,1 is easiser to interpret because the coefficients represents the effect of being male, or no effect if being female
         \end{enumerate}
       \item Income and travel
+
 
         inc25p: 1 if income is greater than 25k, 0 otherwise \\
         inc55p: 1 if income is greater than 55k, 0 otherwise \\
@@ -71,6 +73,11 @@
     \end{enumerate}
 
   \item
+      \begin{figure}[h]
+          \centering
+          \includegraphics[width=0.5\textwidth]{1d.png}
+          \caption{Model 1d}
+      \end{figure}
     The new model has 7 coefficients (without intercept) and NO coefficients are NA. Gender, income greater than 55k, travel time greater than 0.25h and travel time greater than 4h are significant. \\
 
     Based on the significant coefficients, we can make the following interpretation.
@@ -82,7 +89,13 @@
       \item Travel time greater than 4h is associated with 1.8 less visit than travel time less than 4h
 
     \end{enumerate}
-
+  
+  \item
+  \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.5\textwidth]{1e.png}
+      \caption{Model CI}
+  \end{figure}
   \item
     The possion regression has the following probability density function
     \[
@@ -114,10 +127,16 @@
 
 \end{enumerate}
 
+\newpage
 \section*{Problem 2}
 
 \begin{enumerate}[label=(\alph*)]
-  \item See code above
+  \item See (Appendix 2)
+  \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.5\textwidth]{2a.png}
+      \caption{Bootstrap CI}
+  \end{figure}
   \item
     \begin{enumerate}[label=(\roman*)]
       \item the center from both approaches are very close
@@ -126,6 +145,7 @@
     \end{enumerate}
 \end{enumerate}
 
+\newpage
 \section*{Problem 3}
 \begin{enumerate}[label=(\alph*)]
   \item
@@ -201,6 +221,7 @@
     \end{align*}
 \end{enumerate}
 
+\newpage
 \section*{Problem 4}
 \begin{enumerate}[label=(\alph*)]
 \item 
@@ -235,19 +256,45 @@
 where \(\frac{\partial}{\partial \vect{\beta}^2}\) is a matrix with \(\frac{\partial}{\partial \beta_i \partial \beta_j}\) where\(i = 1,\ldots, p, j = 1,\ldots p\)
 
 \item for the function to be convex, the Hessian matrix must be positive definite.
+\end{enumerate}
 
-\item for the ease of computation, we will express the gradient and Hessian in matrix form and let \(\vect \beta' = \begin{bmatrix}
-    \beta_0 & \beta_1 & \ldots & \beta_p
-\end{bmatrix}^T\),
+\newpage
+\section*{Problem 5}
+See (Appendix 5)
+\begin{enumerate}[label=(\alph*)]
+  \item for the ease of computation, we will express the gradient and Hessian in matrix form and let \(\vect \beta' = \begin{bmatrix}
+      \beta_0 & \beta_1 & \ldots & \beta_p
+  \end{bmatrix}^T\),
 
 \[\frac{\partial}{\partial \vect \beta'} = -\vectrm X^T \vectrm y
 + \vectrm X^T \exp(\vectrm X \vect \beta')
 \]
 
 \[\frac{\partial^2}{\partial \vect \beta' \partial \vect \beta'^T} = \vectrm X^T \diag(\exp \{\vectrm X \vect \beta'\}) \vectrm X\]
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.2\textwidth]{5a.png}
+    \caption{Coefficients from Newton's method}
+\end{figure}
+\item
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{5b.png}
+    \caption{Summary of Newton's method}
+\end{figure}
+
+\begin{enumerate}
+    \item Use of standard error assumes we are randomly and independently sampling from the population.
+    \item Use of z value and p-value assumes the distribution is normal, and we know the population variance.
+    \item Use of Null and residual deviance assumes the distribution is exponential and sample is independent. 
+    \cite{npm}
+    \item Use of AIC assumes the sample size is large and sample is independent and model estimates are from MLE
 \end{enumerate}
 
-\section*{Problem 5}
+\end{enumerate}
+
+\newpage
+\section*{Problem 6}
 To get the loss function, We first remove the constant term \(\log(y!)\) from negative log-likelihood since it does not affect the optimization problem.
 \begin{enumerate}[label=(\alph*)]
   \item 
@@ -256,7 +303,6 @@ To get the loss function, We first remove the constant term \(\log(y!)\) from ne
             \exp\left\{\beta_0 + \vect{\beta}^T \vectrm{x}_i\right\}
             \right\} \\
   \end{align*}
-\end{enumerate}
 Then we add the L2 regularization term to the loss function
   \begin{align*}
        \mathcal L_\lambda(\beta_0, \vect \beta | \vectrm y, \vectrm X) &= \sum_{i=1}^{n} \left\{ [\beta_0 + \vect{\beta}^T \vectrm{x}_i]y_i -
@@ -281,9 +327,117 @@ Then we add the L2 regularization term to the loss function
     \frac{\partial^2}{\partial \vect \beta' \partial \vect \beta'^T} \mathcal L_\lambda(\beta_0, \vect \beta \vect \beta'| \vectrm y, \vectrm X) &= \vectrm X^T \diag(\exp \{\vectrm X \vect \beta'\}) \vectrm X - 2\lambda (\vectrm I - e_1e_1^T)
   \end{align*}
 
-  It is required that the Hessian matrix is positive definite for the loss function to be convex.
+\item It is required that the Hessian matrix is positive definite for the loss function to be convex.
+\item 
+\newpage
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{6c.png}
+    \caption{Coefficients from Regularized Newton's method}
+\end{figure}
+\item 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{6d.png}
+    \caption{Coefficients from Regularized GLM}
+\end{figure}
+
+See (Appendix 6)
+
+The coefficients from regularized Newton's method and regularized GLM are very close.
+With \(\lambda = 10\), the tra400p coefficient is greatly increased, while the gen coefficient is slightly decreased. 
+
+\end{enumerate}
+
+\newpage
+\section*{Problem 7}
+\begin{enumerate}[label=(\alph*)]
+  \item  See (Appendix 7)
+  \item  See (Appendix 7)
+  \item 
+
+  \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.5\textwidth]{7c.png}
+      \caption{Compare Newton's method and GLM, both regularized with min lambda, first error is from GLM, second is from Newton's method}
+  \end{figure}
+
+  The regularized Newton's method has a lower error than the regularized GLM when the data is not randomized. When the data is randomized, the difference is undermined by the randomness.
+
+\end{enumerate}
+
+\newpage
+\section*{Problem 8}
+\begin{enumerate}[label=(\alph*)]
+  \item  See (Appendix 8)
+  \item  See (Appendix 8)
+\end{enumerate}
+
+\section*{Problem 9}
+See (Appendix 9)
+\begin{enumerate}[label=(\alph*)]
+  \item 
+  Let \(\hat{\beta}_0\) and \(\hat{\vect{\beta}}\) be the coefficients of the model obtained at the minimum of the cross-validation error.
+  \[
+  \E(y| \vectrm{x}_i) = \exp(\hat{\beta}_0 + \hat{\vect{\beta}}^T \vectrm{x}_i)
+  \]
+  \item  Yes, the regularization set the coefficients of inc25p and inc95p to 0 while keep the inc55p to be non-zero. This corresponds to the coefficients significance in 1a model where inc25p and inc95p are not significant.
+\end{enumerate}
+
+\section*{Problem 10}
+See (Appendix 10)
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{10.png}
+    \caption{MSE of different models}
+\end{figure}
+
+If we compare the Newton vs Ridge-Newton method, we can see that these two methods show remarkably similar performance with MSEs of 1885.96 and 1885.93 respectively, and identical RMSE and MAE values (43.43 and 23.02). This suggests that the ridge penalty in the Ridge-Newton method is having minimal impact on your model, possibly because
+\begin{enumerate}
+    \item The optimal regularization parameter is very small
+    \item The features might not have high multicollinearity
+    \item The dataset may be large enough relative to the number of features that regularization provides little benefit
+\end{enumerate}
+
+If we compare the Ridge-Newton vs GLMNet, we can see that both the ridge and lasso implementations via GLMNet show nearly identical performance (MSE ~2900, RMSE ~53.86, MAE ~23.28). This is considerably worse than the Newton-based methods in terms of MSE/RMSE, but interestingly, the MAE values remain close. The large gap in MSE/RMSE between the Newton methods and GLMNet implementations, coupled with similar MAE values, suggests that the GLMNet models are producing more outlier predictions with large errors, while maintaining similar average error magnitudes.
+
+One possible reason for the difference in MSE/RMSE performance is that the Newton method directly optimizes by using the Hessian matrix, which can converge faster and more accurately for well-behaved problems. While the glmnet uses coordinate descent, which may not converge as fast and may not be as accurate for well-behaved problems. \cite{Tay2023}
+
+\newpage
+\bibliography{refs}
+
+\newpage
+\section*{Appendix 1}
+\inputminted{r}{q1.r}
+
+\newpage
+\section*{Appendix 2}
+\inputminted{r}{q2.r}
 
 
+\newpage
+\section*{Appendix 5}
+\inputminted{r}{q5.r}
+
+\newpage
+\section*{Appendix 6}
+\inputminted{r}{q6.r}
+
+\newpage
+\section*{Appendix 7}
+\inputminted{r}{q7.r}
+
+\newpage
+\section*{Appendix 8}
+\inputminted{r}{q8.r}
+
+\newpage
+\section*{Appendix 9}
+\inputminted{r}{q9.r}
+
+\newpage
+\section*{Appendix 10}
+\inputminted{r}{q10.r}
 
 
 \end{document}

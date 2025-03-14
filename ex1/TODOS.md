@@ -1,3 +1,4 @@
 - q5b missing explaiantion and reference
 - q6d missing comparison
 - q7d missing exp
+- add code outputs
