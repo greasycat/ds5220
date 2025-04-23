@@ -1,0 +1,3 @@
+[submodule "ex2/data"]
+	path = ex2/data
+	url = git@github.com:OpenNeuroDatasets/ds003029.git
