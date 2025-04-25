@@ -1,16 +1,23 @@
+# Plan: train 2 models one for onset and one for offset and compare the complexity of the models
 # %%
 import numpy as np
-from load_data import load_data
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, LSTM
+from load_data import Data
+import keras
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+from sklearn.model_selection import TimeSeriesSplit
 # %%
-downsampling = 100
-data, time, onset = load_data(downsampling=downsampling)
-print(data.shape)
+data = Data(subject='jh101', task="ictal", acquisition="ecog", session='presurgery', run='01', root='data', plot=True)
+
 # %%
-seq_len = 10
+preictal,_ = data.get_truncated(0, 5*data.sf)
+ictal,_ = data.get_truncated(data.onset, 5*data.sf)
+
+print(preictal.shape)
+print(ictal.shape)
+
+# %%
+seq_len = 20
 
 def create_sequences(data, seq_len):
     X = []
@@ -20,57 +27,59 @@ def create_sequences(data, seq_len):
         y.append(data[i+seq_len])
     return np.array(X), np.array(y)
 
+def sequence_cross_validation(data, seq_len, n_splits=5):
+    X, y = create_sequences(data, seq_len)
+    tscv = TimeSeriesSplit(n_splits=n_splits)
+    for train_index, test_index in tscv.split(X):
+        X_train, X_test = X[train_index], X[test_index]
+        y_train, y_test = y[train_index], y[test_index]
+        yield X_train, X_test, y_train, y_test
+
 # %%
-channels = 0
+def get_sequences_from_channel(channel, seq_len):
+    preictal_X, preictal_y = create_sequences(preictal[channel,:], seq_len)
+    ictal_X, ictal_y = create_sequences(ictal[channel,:], seq_len)
+    return preictal_X, preictal_y, ictal_X, ictal_y
 
-before_onset = data[channels, :onset//downsampling]
-after_onset = data[channels, onset//downsampling:]
-
-train_X, train_y = create_sequences(before_onset, seq_len)
-test_X, test_y = create_sequences(after_onset, seq_len)
-print(train_X.shape)
-print(train_y.shape)
-print(test_X.shape)
-print(test_y.shape)
 # %%
-model = Sequential()
-model.add(LSTM(50, activation='relu', input_shape=(seq_len, 1)))
-model.add(Dense(1))
-model.compile(optimizer='adam', loss='mse')
-history = model.fit(train_X, train_y, epochs=20, validation_data=(test_X, test_y), batch_size=32)
+preictal_model = keras.Sequential()
+preictal_model.add(keras.layers.SimpleRNN(50, activation='relu', input_shape=(seq_len, 1)))
+preictal_model.add(keras.layers.Dense(1))
+preictal_model.compile(optimizer='adam', loss='mse', metrics=['mse'])
 
-# plot the loss
-plt.plot(history.history['loss'], label='train')
-plt.plot(history.history['val_loss'], label='test')
-plt.legend()
+def cv_model(model, data, seq_len, n_splits=5):
+    average_mse = 0
+    for X_train, X_test, y_train, y_test in sequence_cross_validation(data, seq_len, n_splits):
+        model = keras.models.clone_model(preictal_model)
+        model.fit(X_train, y_train, epochs=5, validation_split=0.2, batch_size=32, verbose=0)
+        test_loss = model.evaluate(X_test, y_test, verbose=0)
+        average_mse += test_loss[1]
+    average_mse /= n_splits
+    return average_mse
+
+preictal_mse = []
+ictal_mse = []
+random_sample_channels = np.random.randint(0, preictal.shape[0], 10)
+for i in tqdm(random_sample_channels, desc="Training models"):
+    preictal_mse.append(cv_model(preictal_model, preictal[i,:], seq_len))
+    ictal_mse.append(cv_model(preictal_model, ictal[i,:], seq_len))
+    print(f"Channel {i} preictal mse: {preictal_mse[-1]}, ictal mse: {ictal_mse[-1]}")
+
+# %%
+import seaborn as sns
+import numpy as np
+
+data = {
+    'Channel': list(range(len(preictal_mse))) * 2,
+    'MSE': preictal_mse + ictal_mse,
+    'State': ['Preictal'] * len(preictal_mse) + ['Ictal'] * len(ictal_mse)
+}
+
+sns.barplot(x='Channel', y='MSE', hue='State', data=data)
+plt.title('MSE Comparison: Preictal vs Ictal States')
+plt.xlabel('Channel')
+plt.ylabel('Mean Squared Error')
+plt.legend(title='State')
 plt.show()
-
 # %%
-def predict_future(model, last_seq, future_len):
-    future_pred = []
-    current_seq = last_seq.copy()
-    for _ in tqdm(range(future_len), desc="Predicting future values"):
-        next_pred = model.predict(current_seq.reshape(1, seq_len), verbose=0)[0]
-        future_pred.append(next_pred[0])
-        current_seq = np.append(current_seq[1:], next_pred[0])
-    
-    future_pred = np.array(future_pred).reshape(-1, 1)
-    return future_pred
-
-# %%
-last_seq = train_X[-1, :]
-future_pred = predict_future(model, last_seq, 100)
-# %%
-
-# plot the predicted and actual values
-plt.plot(test_y, label='actual')
-plt.plot(future_pred, label='predicted')
-plt.legend()
-plt.show()
-
-
-
-
-
-
 # %%

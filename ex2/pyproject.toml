@@ -13,4 +13,12 @@ dependencies = [
     "numpy<2.0.0",
     "pmdarima>=2.0.4",
     "tensorflow[and-cuda]>=2.18.1",
+    "keras>=3.9.2",
+    "seaborn>=0.13.2",
+    "pywavelets>=1.8.0",
+]
+
+[dependency-groups]
+dev = [
+    "basedpyright>=1.29.1",
 ]
