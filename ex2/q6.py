@@ -25,7 +25,7 @@ def auto_arima_orders(data):
         warnings.filterwarnings("ignore")
         orders = []
         for i in tqdm(range(data.shape[0]), desc="Fitting channels"):
-            model = auto_arima(data[i,:], start_p=0, start_q=0, max_p=60, max_q=60, m=1,
+            model = auto_arima(data[i,:], start_p=0, start_q=0, max_p=13, max_q=13, m=1,
                     start_P=0, 
                     seasonal=False,
                     d=0, 

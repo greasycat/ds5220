@@ -58,12 +58,11 @@ See q1q2.py for the implementation.
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.6\textwidth]{figs/q2.png}
-    \caption{Distribution of Orders for each channel over all time, first half of time, and second half of time}
+    \caption{Distribution of Orders for each channel over  0-500ms, and  \(t_{onset}\) to \(t_{onset}\)+500ms}
     \label{fig:q2}
 \end{figure}
 
-We plot 4 histograms, the first one is the distribution of orders for each channel over all time, the second one is the distribution of orders for each channel over the first half of time, the third one is the distribution of orders for each channel over the second half of time, and the fourth one is the distribution of orders for each channel over the first half of time + 15 seconds.
-We choose the onset time to be the first half of the data as we expect to see a different pattern between the two halves. The postictal data has more channels matching the AR order of 20, while the preictal data does not, this suggests that the epileptic activity changes the brain signal. We can also see some channels with greather than 20 orders when comparing the first half of time and the first half of time + 15 seconds, which may suggest the effect of the epileptic activity is not immediate.
+We plot 2 histograms, the first one is the distribution of orders for each channel over 0-500ms, and the second one is the distribution of orders for each channel over \(t_{onset}\) to \(t_{onset}\)+500ms. The overall distribution of orders is similar, we have channels with estimated order around 50 but the second histogram has more channels with estimated order of 2. This suggests that the epileptic activity changes the brain signal and the effect is not immediate.
 
 
 \newpage
@@ -133,8 +132,16 @@ See q4q5.py for the implementation.
 
 \section*{Question 6}
 
-We use auto-arima model to find the best model for each channel and plot the ACF and PACF of the residuals. And AR(3) models is the best model for most channels. We also notice that the the largest order of the AR model is 7 where the largest order of the MA model is 4. Based on our knowledge of the epileptic activity and brain signal, it is reasonable to infer that the brain signals have different frequency components. Since the data is collected from subject with epilepsy, we might expect the same pattern of the brain signal among other subjects.
+We use the library pmdarima to fit the best ARMA models for each channel. We then plot the distribution of the orders for each channel over 0-500ms, and \(t_{onset}\) to \(t_{onset}\)+500ms. 
 
+The two distributions exhibit a similar pattern, but the ictal period data seems to be better modeled with  smaller MA order
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figs/q6.png}
+    \caption{Distribution of Orders for each channel over 0-500ms, and \(t_{onset}\) to \(t_{onset}\)+500ms}
+    \label{fig:q6}
+\end{figure}
 \section*{Question 7}
 
 Note that \(x_k, \vect{x_{-k}} \sim \mathcal{N}(\vect \mu, \vect \Theta^{-1})\), we can partition the mean and covariance matrix as
@@ -245,6 +252,43 @@ One advantage of the first method is that can be easily run in parallel, while t
 See q10.py for the implementation.
 
 \section*{Question 11}
+We use the same architecture of RNN to predict the epileptic activity for preictal and ictal data and compare the performance of the two models in terms of MSE. The preictal model has a lower MSE than the ictal model. The fact that the same architecture of RNN is not able to model the preictal and ictal data with the same error after cross validation, suggests that the preictal and ictal data have different characteristics. Intuitively, the models with the same complexity should be able to model the preictal and ictal data with the same error. The difference in performance may be due to the difference in the distribution of the data in different channels.
+
+See q11.py for the implementation.
+
+\section*{Question 12}
+
+See q12.py for the implementation.
+
+\section*{Question 13}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figs/q13.png}
+    \caption{Distribution of density}
+    \label{fig: q13}
+\end{figure}
+
+The plots suggests a potential trend in the data. Here we use the chow test to test the null hypothesis that the two regression model on data before and after are the same. The test gives a p-value of 3e-6, which is very small, so we reject the null hypothesis and conclude that there is a trend in the data. Although chow test is not the best test for this purpose, it is still a good test to detect the structural change of the data.
+
+See q12q13.py for the implementation.
+
+
+
+
+\section*{Question 14}
+
+Here we use the RNN again but this time we try to classify time windows into preictal and ictal states. RNN takes a sequence of data as input and output a probability distribution of the class of the input. The difference here, compared to previous RNN is that we use sigmoid function to output the probability of the class. We then compute the ROC AUC and f1 score to evaluate the performance of the model.
+
+The distibution of the density is shown in the following figure. Some channels achieves a high f1 score and ROC AUC, but some channels achieve a low f1 score and ROC AUC. The difference in performance can be due to the difference in the distribution of the data in different channels. What's more, the performance of the model may be directly related to the spatial characteristics of the electrodes. Electrode with higher scores may be closer to the seizure onset or can be more likely to be affected by the seizure. An area of interest analysis may be helpful to understand the spatial characteristics of the electrodes.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figs/q14.png}
+    \caption{Distribution of density}
+    \label{fig: q14}
+\end{figure}
+See q14.py for the implementation.
 
 
 
