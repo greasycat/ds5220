@@ -7,5 +7,18 @@ requires-python = ">=3.12"
 dependencies = [
     "jupyter>=1.1.1",
     "mne>=1.9.0",
+    "mne-bids>=0.16.0",
     "pandas>=2.2.3",
+    "statsmodels>=0.14.4",
+    "numpy<2.0.0",
+    "pmdarima>=2.0.4",
+    "tensorflow[and-cuda]>=2.18.1",
+    "keras>=3.9.2",
+    "seaborn>=0.13.2",
+    "pywavelets>=1.8.0",
+]
+
+[dependency-groups]
+dev = [
+    "basedpyright>=1.29.1",
 ]

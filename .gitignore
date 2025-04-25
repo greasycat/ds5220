@@ -18,3 +18,4 @@
 *.pygstyle
 .Rproj.user
 
+*.npy
